@@ -1,0 +1,72 @@
+#include <iostream>
+#include <stdio.h> 
+#include <stdlib.h>
+#include <stdint.h>
+#include <math.h>
+#include <string.h>
+
+using namespace std;
+
+#define N_hc 4 
+#define D_MODEL 4096 
+
+typedef struct {
+    uint16_t bits;
+} bf16;
+
+
+float bf16_to_fp32(bf16 b) {
+    uint32_t sign = (b.bits >> 15);
+    uint32_t exponent = (b.bits >> 7) & 0xFF;
+    uint32_t mantissa = b.bits & 0x7F;
+
+    uint32_t mant = mantissa << 16;
+    uint32_t fp32_bits = (sign << 31) | (exponent << 23) | mant;
+    float result;
+    memcpy(&result, &fp32_bits, sizeof(result));
+    return result;
+}
+
+
+bf16 fp32_to_bf16(float f) {
+    uint32_t fp32_bits;
+    memcpy(&fp32_bits, &f, sizeof(fp32_bits));
+
+    uint32_t sign = (fp32_bits >> 31);
+    uint32_t exponent = (fp32_bits >> 23) & 0xFF;
+    uint32_t mantissa = fp32_bits & 0x7FFFFF;
+
+    uint32_t mant = mantissa >> 16;
+    bf16 b;
+    b.bits = (uint16_t)((sign << 15) | (exponent << 7) | mant);
+    return b;
+}
+
+void matmul_A_X(float A[N_hc], bf16 X_l[N_hc][D_MODEL], bf16 Y_l[D_MODEL]) {
+	for (int j = 0; j < D_MODEL; j++) {
+		float sum = 0.0f;
+		for (int i = 0; i < N_hc; i++) {
+			sum += A[i] * bf16_to_fp32(X_l[i][j]);
+		}
+		Y_l[j] = fp32_to_bf16(sum);
+	}
+}
+
+int main() {
+	float A_l[N_hc] = { 0.55f, 0.48f, 0.62f, 0.57f };
+
+	bf16 X_l[N_hc][D_MODEL];
+    bf16 Y_l[D_MODEL];
+
+    for (int i = 0; i < N_hc; i++) {
+        for (int j = 0; j < D_MODEL; j++) {
+            X_l[i][j] = fp32_to_bf16((float)(rand() % 100) / 10.0f);
+        }
+    }
+
+    matmul_A_X(A_l, X_l, Y_l);
+    for (int j = 0; j < 10; ++j) {
+        cout << bf16_to_fp32(Y_l[j]) << '\n';
+    }
+
+    return 0;
