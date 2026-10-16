@@ -46,7 +46,7 @@ void matmul_A_X(float A_l[N_hc], bf16 X_l[N_hc][D_MODEL], bf16 Y_l[D_MODEL]) {
 	for (int j = 0; j < D_MODEL; j++) {
 		float sum = 0.0f;
 		for (int i = 0; i < N_hc; i++) {
-			sum += A[i] * bf16_to_fp32(X_l[i][j]);
+			sum += A_l[i] * bf16_to_fp32(X_l[i][j]);
 		}
 		Y_l[j] = fp32_to_bf16(sum);
 	}
