@@ -1,7 +1,6 @@
 # Matmul A * X (khối Hyperconnection)
 
 Mô hình C: `X (bf16, đã có trong thanh ghi x_i) -> Matmul Y = A * X -> Store -> RAB (o_y)`.
-Module này không có LOAD: dữ liệu X được test đưa thẳng vào `REG.x_i`.
 
 ## Cấu trúc thư mục
 
@@ -21,16 +20,24 @@ Module này không có LOAD: dữ liệu X được test đưa thẳng vào `REG
 └── test/
     └── main.c
 ```
+2. Các bước chạy (Windows, từ lúc mở PowerShell)
+Bước 1. Mở PowerShell
+Nhấn phím Windows, gõ PowerShell, nhấn Enter.
 
-## Công thức
+Bước 2. Kiểm tra đã có gcc, make và git
+gcc --version
+mingw32-make --version
+git --version
+Mỗi lệnh phải in ra số phiên bản. Nếu lệnh nào báo is not recognized thì làm theo mục 3 (cài công cụ) rồi quay lại.
 
-Với mỗi cột `j`: `Y[j] = sum(i = 0..N_HC-1) A[i] * bf16_to_fp32(X[i][j])`.
-Tích lũy theo fp32, kết quả đổi về bf16 và lưu vào `regs.y_l`.
+Bước 3. Lấy code từ GitHub
+git clone https://github.com/htranngochuy/Deepseek-.git
+Bước 4. Vào thư mục gốc của project
+cd Deepseek-
+Bước 5. Kiểm tra đang ở đúng thư mục
+dir
+Phải thấy Makefile, include, source, test.
 
-## Chạy
+Bước 6. Biên dịch và chạy
+mingw32-make run
 
-```sh
-make run
-```
-
-Trên Windows dùng `mingw32-make run`.
