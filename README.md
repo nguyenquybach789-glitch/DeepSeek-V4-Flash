@@ -6,22 +6,6 @@ Module này tính `Y = A × X` rồi ghi kết quả vào bộ nhớ đệm RAB.
 - `X` là ma trận bf16 kích thước `[N_HC][D_MODEL]`, đã nằm sẵn trong thanh ghi `REG.x_i`.
 - `Y` là vector bf16 kích thước `[D_MODEL]`, lưu tại `REG.y_l` rồi được copy sang `RAB.o_y`.
 
-Module này **không có LOAD**. Trong `test/main.c`, dữ liệu X được tạo ngẫu nhiên rồi copy thẳng vào `REG.x_i` để giả lập bước LOAD.
-
-Luồng dữ liệu:
-
-```
-X (test tạo ngẫu nhiên, bf16)
-   │  memcpy (giả lập LOAD)
-   ▼
-REG.x_i  ──matmul_A_X(&REG)──▶  REG.y_l
-                                   │  store_lc_o_y(&REG, &RAB, 0)
-                                   ▼
-                              RAB.o_y[0]
-```
-
----
-
 ## 1. Cấu trúc thư mục
 
 ```
