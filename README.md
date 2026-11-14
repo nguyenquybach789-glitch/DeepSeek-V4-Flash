@@ -2,7 +2,7 @@
 
 Mô hình C: `X (bf16, đã có trong thanh ghi x_i) -> Matmul Y = A * X -> Store -> RAB (o_y)`.
 
-## Cấu trúc thư mục
+## 1.Cấu trúc thư mục
 
 ```
 <thư-mục-gốc>/
@@ -20,24 +20,26 @@ Mô hình C: `X (bf16, đã có trong thanh ghi x_i) -> Matmul Y = A * X -> Stor
 └── test/
     └── main.c
 ```
-2. Các bước chạy (Windows, từ lúc mở PowerShell)
-Bước 1. Mở PowerShell
+## 2. Các bước chạy (Windows, từ lúc mở PowerShell)
+# Bước 1. Mở PowerShell
 Nhấn phím Windows, gõ PowerShell, nhấn Enter.
 
-Bước 2. Kiểm tra đã có gcc, make và git
+# Bước 2. Kiểm tra đã có gcc, make và git
 gcc --version
 mingw32-make --version
 git --version
 Mỗi lệnh phải in ra số phiên bản. Nếu lệnh nào báo is not recognized thì làm theo mục 3 (cài công cụ) rồi quay lại.
 
-Bước 3. Lấy code từ GitHub
+# Bước 3. Lấy code từ GitHub
 git clone https://github.com/htranngochuy/Deepseek-.git
-Bước 4. Vào thư mục gốc của project
+
+# Bước 4. Vào thư mục gốc của project
 cd Deepseek-
-Bước 5. Kiểm tra đang ở đúng thư mục
+
+# Bước 5. Kiểm tra đang ở đúng thư mục
 dir
 Phải thấy Makefile, include, source, test.
 
-Bước 6. Biên dịch và chạy
+# Bước 6. Biên dịch và chạy
 mingw32-make run
 
