@@ -225,9 +225,3 @@ Trong `source/data_type.c`, thay `fp32_to_bf16` bằng phiên bản làm tròn v
 | Kết quả khác `15.562500 ...` | Đã sửa `A`, `srand`, hoặc vòng lặp tạo X trong `test/main.c`. Hoàn nguyên lại và chạy lại. |
 
 ---
-
-## 8. Ghi chú
-
-- Module này chỉ gồm Matmul và Store. LOAD, Flatten và RMSNorm nằm ở module khác.
-- Phần ghi vào RAB dùng `memcpy` trực tiếp. Khi tích hợp vào nền tảng phần cứng, bạn có thể thay bằng hàm bus riêng.
-- Accumulate bằng fp32, kết quả được làm tròn xuống bf16 bằng cách cắt bit, nên giá trị có thể lệch tối đa khoảng 0,8% (tương ứng 1/128) so với tính toán toán học chính xác.
